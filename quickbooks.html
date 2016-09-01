@@ -1,0 +1,231 @@
+<script type="text/javascript">
+    RED.nodes.registerType('quickbooks-configuration',{
+        category: 'config',
+        defaults: {
+            name: {required:true},
+            consumerKey: {required:true},
+            consumerSecret: {required:true},
+            oauthToken: {required:true},
+            oauthTokenSecret: {required:true},
+            realmId: {required:true},
+            destination: {required:true, value:"Production"}
+        },
+        label: function() {
+            return this.name;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="quickbooks-configuration">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-config-input-consumerKey"><i class="icon-tag"></i> Consumer key</label>
+        <input type="text" id="node-config-input-consumerKey" placeholder="Consumer key">
+    </div>
+	<div class="form-row">
+        <label for="node-config-input-consumerSecret"><i class="icon-tag"></i> Consumer secret</label>
+        <input type="text" id="node-config-input-consumerSecret" placeholder="Consumer secret">
+    </div>
+	<div class="form-row">
+        <label for="node-config-input-oauthToken"><i class="icon-tag"></i> OAuth token</label>
+        <input type="text" id="node-config-input-oauthToken" placeholder="OAuth token">
+    </div>
+	<div class="form-row">
+        <label for="node-config-input-oauthTokenSecret"><i class="icon-tag"></i> OAuth token secret</label>
+        <input type="text" id="node-config-input-oauthTokenSecret" placeholder="OAuth token secret">
+    </div>
+	<div class="form-row">
+        <label for="node-config-input-realmId"><i class="icon-tag"></i> Realm id</label>
+        <input type="text" id="node-config-input-realmId" placeholder="Realm id">
+    </div>
+	<div class="form-row">
+        <label for="node-config-input-destination"><i class="fa fa-folder"></i> Destination</label>
+		<select id="node-config-input-destination">
+			<option value="Production">Production</option>
+			<option value="Sandbox">Sandbox</option>
+		</select>
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('quickbooks',{
+        category: 'function',
+        color: '#FFF',
+        defaults: {
+            name: {value:""},
+            method: {required:true},
+            configuration: {required:true, type:"quickbooks-configuration"},
+        },
+        inputs:1,
+        outputs:1,
+        icon: "quickbooks.png",
+        label: function() {
+            return this.name||"quickbooks";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="quickbooks">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+	<div class="form-row">
+        <label for="node-input-method"><i class="icon-tag"></i> Method</label>
+		<select id="node-input-method">
+
+		<option value="createAccount">createAccount</option>
+		<option value="createAttachable">createAttachable</option>
+		<option value="createBill">createBill</option>
+		<option value="createBillPayment">createBillPayment</option>
+		<option value="createClass">createClass</option>
+		<option value="createCreditMemo">createCreditMemo</option>
+		<option value="createCustomer">createCustomer</option>
+		<option value="createDepartment">createDepartment</option>
+		<option value="createDeposit">createDeposit</option>
+		<option value="createEmployee">createEmployee</option>
+		<option value="createEstimate">createEstimate</option>
+		<option value="createInvoice">createInvoice</option>
+		<option value="createItem">createItem</option>
+		<option value="createJournalEntry">createJournalEntry</option>
+		<option value="createPayment">createPayment</option>
+		<option value="createPaymentMethod">createPaymentMethod</option>
+		<option value="createPurchase">createPurchase</option>
+		<option value="createPurchaseOrder">createPurchaseOrder</option>
+		<option value="createRefundReceipt">createRefundReceipt</option>
+		<option value="createSalesReceipt">createSalesReceipt</option>
+		<option value="createTaxAgency">createTaxAgency</option>
+		<option value="createTaxService">createTaxService</option>
+		<option value="createTerm">createTerm</option>
+		<option value="createTimeActivity">createTimeActivity</option>
+		<option value="createTransfer">createTransfer</option>
+		<option value="createVendor">createVendor</option>
+		<option value="createVendorCredit">createVendorCredit</option>
+
+		<option value="getAccount">getAccount</option>
+		<option value="getAttachable">getAttachable</option>
+		<option value="getBill">getBill</option>
+		<option value="getBillPayment">getBillPayment</option>
+		<option value="getClass">getClass</option>
+		<option value="getCompanyInfo">getCompanyInfo</option>
+		<option value="getCreditMemo">getCreditMemo</option>
+		<option value="getCustomer">getCustomer</option>
+		<option value="getDepartment">getDepartment</option>
+		<option value="getDeposit">getDeposit</option>
+		<option value="getEmployee">getEmployee</option>
+		<option value="getEstimate">getEstimate</option>
+		<option value="getExchangeRate">getExchangeRate</option>
+		<option value="getInvoice">getInvoice</option>
+		<option value="getItem">getItem</option>
+		<option value="getJournalEntry">getJournalEntry</option>
+		<option value="getPayment">getPayment</option>
+		<option value="getPaymentMethod">getPaymentMethod</option>
+		<option value="getPreferences">getPreferences</option>
+		<option value="getPurchase">getPurchase</option>
+		<option value="getPurchaseOrder">getPurchaseOrder</option>
+		<option value="getRefundReceipt">getRefundReceipt</option>
+		<option value="getReports">getReports</option>
+		<option value="getSalesReceipt">getSalesReceipt</option>
+		<option value="getTaxAgency">getTaxAgency</option>
+		<option value="getTaxCode">getTaxCode</option>
+		<option value="getTaxRate">getTaxRate</option>
+		<option value="getTerm">getTerm</option>
+		<option value="getTimeActivity">getTimeActivity</option>
+		<option value="getVendor">getVendor</option>
+		<option value="getVendorCredit">getVendorCredit</option>
+
+		<option value="updateAccount">updateAccount</option>
+		<option value="updateAttachable">updateAttachable</option>
+		<option value="updateBill">updateBill</option>
+		<option value="updateBillPayment">updateBillPayment</option>
+		<option value="updateClass">updateClass</option>
+		<option value="updateCompanyInfo">updateCompanyInfo</option>
+		<option value="updateCreditMemo">updateCreditMemo</option>
+		<option value="updateCustomer">updateCustomer</option>
+		<option value="updateDepartment">updateDepartment</option>
+		<option value="updateDeposit">updateDeposit</option>
+		<option value="updateEmployee">updateEmployee</option>
+		<option value="updateEstimate">updateEstimate</option>
+		<option value="updateInvoice">updateInvoice</option>
+		<option value="updateItem">updateItem</option>
+		<option value="updateJournalEntry">updateJournalEntry</option>
+		<option value="updatePayment">updatePayment</option>
+		<option value="updatePaymentMethod">updatePaymentMethod</option>
+		<option value="updatePreferences">updatePreferences</option>
+		<option value="updatePurchase">updatePurchase</option>
+		<option value="updatePurchaseOrder">updatePurchaseOrder</option>
+		<option value="updateRefundReceipt">updateRefundReceipt</option>
+		<option value="updateSalesReceipt">updateSalesReceipt</option>
+		<option value="updateTaxAgency">updateTaxAgency</option>
+		<option value="updateTaxCode">updateTaxCode</option>
+		<option value="updateTaxRate">updateTaxRate</option>
+		<option value="updateTerm">updateTerm</option>
+		<option value="updateTimeActivity">updateTimeActivity</option>
+		<option value="updateTransfer">updateTransfer</option>
+		<option value="updateVendor">updateVendor</option>
+		<option value="updateVendorCredit">updateVendorCredit</option>
+		<option value="updateExchangeRate">updateExchangeRate</option>
+
+		<option value="deleteAttachable">deleteAttachable</option>
+		<option value="deleteBill">deleteBill</option>
+		<option value="deleteBillPayment">deleteBillPayment</option>
+		<option value="deleteCreditMemo">deleteCreditMemo</option>
+		<option value="deleteDeposit">deleteDeposit</option>
+		<option value="deleteEstimate">deleteEstimate</option>
+		<option value="deleteInvoice">deleteInvoice</option>
+		<option value="deleteJournalEntry">deleteJournalEntry</option>
+		<option value="deletePayment">deletePayment</option>
+		<option value="deletePurchase">deletePurchase</option>
+		<option value="deletePurchaseOrder">deletePurchaseOrder</option>
+		<option value="deleteRefundReceipt">deleteRefundReceipt</option>
+		<option value="deleteSalesReceipt">deleteSalesReceipt</option>
+		<option value="deleteTimeActivity">deleteTimeActivity</option>
+		<option value="deleteTransfer">deleteTransfer</option>
+		<option value="deleteVendorCredit">deleteVendorCredit</option>
+
+		<option value="findAccounts">findAccounts</option>
+		<option value="findAttachables">findAttachables</option>
+		<option value="findBills">findBills</option>
+		<option value="findBillPayments">findBillPayments</option>
+		<option value="findBudgets">findBudgets</option>
+		<option value="findClasses">findClasses</option>
+		<option value="findCompanyInfos">findCompanyInfos</option>
+		<option value="findCreditMemos">findCreditMemos</option>
+		<option value="findCustomers">findCustomers</option>
+		<option value="findDepartments">findDepartments</option>
+		<option value="findDeposits">findDeposits</option>
+		<option value="findEmployees">findEmployees</option>
+		<option value="findEstimates">findEstimates</option>
+		<option value="findInvoices">findInvoices</option>
+		<option value="findItems">findItems</option>
+		<option value="findJournalEntries">findJournalEntries</option>
+		<option value="findPayments">findPayments</option>
+		<option value="findPaymentMethods">findPaymentMethods</option>
+		<option value="findPreferenceses">findPreferenceses</option>
+		<option value="findPurchases">findPurchases</option>
+		<option value="findPurchaseOrders">findPurchaseOrders</option>
+		<option value="findRefundReceipts">findRefundReceipts</option>
+		<option value="findSalesReceipts">findSalesReceipts</option>
+		<option value="findTaxAgencies">findTaxAgencies</option>
+		<option value="findTaxCodes">findTaxCodes</option>
+		<option value="findTaxRates">findTaxRates</option>
+		<option value="findTerms">findTerms</option>
+		<option value="findTimeActivities">findTimeActivities</option>
+		<option value="findVendors">findVendors</option>
+		<option value="findVendorCredits">findVendorCredits</option>
+		<option value="findExchangeRates">findExchangeRates</option>
+
+		</select>
+    </div>
+	<div class="form-row">
+        <label for="node-input-configuration"><i class="icon-tag"></i> Configuration</label>
+        <input type="text" id="node-input-configuration">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="quickbooks">
+    <p>A node for interfacing with the Quickbooks api.</p>
+</script>
