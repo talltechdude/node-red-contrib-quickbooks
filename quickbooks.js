@@ -10,6 +10,10 @@ module.exports = function(RED) {
         	this.on('input', function(msg) {
         	    
         	    var configuration = RED.nodes.getNode(config.configuration);
+        	    
+        	    if(msg.configuration){
+        		configuration = msg.configuration;
+        	    }
                             
                     var consumerKey = configuration.consumerKey;
                     var consumerSecret = configuration.consumerSecret;
