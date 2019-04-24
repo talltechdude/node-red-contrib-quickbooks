@@ -1,2 +1,2 @@
-# Exentriq-GAIA.node-red-contrib-quickbooks
-Node-RED node for Intuit's Quickbooks integration
+# node-red-contrib-quickbooks
+Node-RED node for Intuit's Quickbooks integration with oAuth2 integration
