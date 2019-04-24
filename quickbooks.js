@@ -1,5 +1,5 @@
 module.exports = function(RED) {
-	
+
     function Quickbooks(config) {
         RED.nodes.createNode(this,config);
         var node = this;
@@ -8,24 +8,23 @@ module.exports = function(RED) {
 
         try {
         	this.on('input', function(msg) {
-        	    
+
         	    var configuration = RED.nodes.getNode(config.configuration);
-        	    
+
         	    if(msg.configuration){
-        		configuration = msg.configuration;
+	        		configuration = msg.configuration;
         	    }
-                            
-                    var consumerKey = configuration.consumerKey;
-                    var consumerSecret = configuration.consumerSecret;
-                    var oauthToken = configuration.oauthToken;
-                    var oauthTokenSecret = configuration.oauthTokenSecret;
+
+                    var clientID = configuration.clientID;
+                    var clientSecret = configuration.clientSecret;
+                    var accessToken = configuration.accessToken;
+                    var refreshToken = configuration.refreshToken;
                     var realmId = configuration.realmId;
                     var sandbox;
-                    
+
                     var method = config.method;
-    
-                    var production = true;
-                    if (configuration.destination) { 
+
+                    if (configuration.destination) {
                         if(configuration.destination == 'Production'){
                     		sandbox = false;
                         }
@@ -33,15 +32,24 @@ module.exports = function(RED) {
                     		sandbox = true;
                         }
                     }
-                    
-                    var qbo = new QuickBooksApi(consumerKey, consumerSecret, oauthToken, oauthTokenSecret, realmId, sandbox, true);
-                    
+
+					var qbo = new QuickBooksApi(clientID,
+                        clientSecret,
+                        accessToken, /* oAuth access token */
+                        false, /* no token secret for oAuth 2.0 */
+                        realmId,
+                        sandbox, /* use a sandbox account */
+                        true, /* turn debugging on */
+                        4, /* minor version */
+                        '2.0', /* oauth version */
+                        refreshToken /* refresh token */);
+
                     var thisNode = this;
-                    
+
                     thisNode.status({fill:"green",shape:"dot",text:"working..."});
-                    
+
                     qbo[method](msg.payload, function(err, response) {
-                	
+
                 	thisNode.status({});
                 	var payload = {};
                 	if(err){
@@ -53,26 +61,26 @@ module.exports = function(RED) {
                 	msg.payload = payload;
                         node.send(msg);
                     })
-                                
+
         	});
         }
     	catch(e){
     		node.error("Ops, there is an error...!", msg);
         }
     }
-    
+
     function QuickbooksConfiguration(n) {
-	
+
         RED.nodes.createNode(this,n);
         this.name = n.name;
-        this.consumerKey = n.consumerKey;
-        this.consumerSecret = n.consumerSecret;
-        this.oauthToken = n.oauthToken;
-        this.oauthTokenSecret = n.oauthTokenSecret;
+        this.clientID = n.clientID;
+        this.clientSecret = n.clientSecret;
+        this.accessToken = n.accessToken;
+        this.refreshToken = n.refreshToken;
         this.realmId = n.realmId;
         this.destination = n.destination;
     }
-    
-    RED.nodes.registerType("quickbooks",Quickbooks);
-    RED.nodes.registerType("quickbooks-configuration",QuickbooksConfiguration);
+
+    RED.nodes.registerType("quickbooks", Quickbooks);
+    RED.nodes.registerType("quickbooks-configuration", QuickbooksConfiguration);
 }
