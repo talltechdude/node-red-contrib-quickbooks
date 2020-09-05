@@ -22,7 +22,7 @@ module.exports = function(RED) {
                     var realmId = configuration.realmId;
                     var sandbox;
 
-                    var method = config.method;
+                    var method = configuration.method;
 
                     if (configuration.destination) {
                         if(configuration.destination == 'Production'){
